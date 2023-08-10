@@ -7,9 +7,9 @@
  */
 int main(void)
 {
-	char *string = "and that piece of art is useful\" - Dora Korpar, 2015-10-19";
-	int length = strlen(string);
+	char *str = "and that piece of art is useful\" - Dora Korpar, 2015-10-19\n";
+	int length = strlen(str);
 
-	write(1, string, length);
+	write(1, str, length);
 	return (1);
 }
