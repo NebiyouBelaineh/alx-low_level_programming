@@ -1,9 +1,9 @@
 #include <stdio.h>
 
 /**
- * main: prints string using printf().
+ * main - Prints string using printf()
  *
- * Return: 0 (Success).
+ * Return: 0 (Success)
  */
 int main(void)
 {
