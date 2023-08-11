@@ -1,11 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+
 /**
  * main - prints number is +ve,-ve or zero
- * depending on the value of random number 'n'*/
-
-/* Return: 0 upon success
+ * depending on the value of random number 'n'
+ *
+ * Return: 0 upon success
  */
 
 int main(void)
@@ -19,7 +20,7 @@ int main(void)
 	{
 		printf("%d is positive\n", n);
 	}
-	else if(n < 0)
+	else if (n < 0)
 	{
 		printf("%d is negative\n", n);
 	}
@@ -27,6 +28,6 @@ int main(void)
 	{
 		printf("%d is zero\n", n);
 	}
-	
+
 	return (0);
 }
