@@ -2,4 +2,4 @@
  * main.h - includes prototypes for function _putchar
  */
 
-int _putchar(void);
+int _putchar(char c);
