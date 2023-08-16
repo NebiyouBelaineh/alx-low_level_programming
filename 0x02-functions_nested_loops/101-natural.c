@@ -12,12 +12,12 @@ int main(void)
 	int n, i, sum;
 
 	n = 1024;
-	i = n;
+	i = n - 1;
 	sum = 0;
 
 	while (i > 0)
 	{
-		if (i % 3 || i % 5)
+		if ((i % 3 == 0) || (i % 5 == 0))
 			sum +=i;
 		i--;
 	}
