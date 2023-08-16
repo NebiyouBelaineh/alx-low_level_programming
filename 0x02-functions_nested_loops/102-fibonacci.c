@@ -9,7 +9,7 @@
 
 int main(void)
 {
-	int i, x, y, s;
+	long int i, x, y, s;
 	
 	x = 0;
 	y = 1;
@@ -21,10 +21,11 @@ int main(void)
 		else if(i >= 1)
 			s = x + y;
 
-		printf("%d, ", s);
+		printf("%ld, ", s);
 		
 		x = y;
 		y = s;
 	}
+	printf("\n");
 	return(0);
 }
