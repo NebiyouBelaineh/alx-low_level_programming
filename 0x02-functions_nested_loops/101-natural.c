@@ -18,7 +18,7 @@ int main(void)
 	while (i > 0)
 	{
 		if ((i % 3 == 0) || (i % 5 == 0))
-			sum +=i;
+			sum += i;
 		i--;
 	}
 	printf("%d\n", sum);
