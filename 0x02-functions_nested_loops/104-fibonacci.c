@@ -9,25 +9,44 @@
 
 int main(void)
 {
-	long int i, x, y, s;
+	unsigned long i, x, y, s;
+	unsigned long x1, x2, y1, y2;
 
 	x = 0;
 	y = 1;
 
-	for (i = 0; i < 98; i++)
+	for (i = 0; i < 91; i++)
 	{
 		if (i == 0)
 			s = 1;
 		else if (i >= 1)
 			s = x + y;
 
-		printf("%lu", (long unsigned)s);
+		printf("%lu", s);
 
-		if (i == 98)
-			continue;
 		printf(", ");
 		x = y;
 		y = s;
+	}
+
+	x1 = x / 10000000000;
+	x2 = x % 10000000000;
+	y1 = y / 10000000000;
+	y2 = y % 10000000000;
+
+	for (i = 91; i < 99; i++)
+	{
+		printf ("%lu", y1 + (y2 / 10000000000));
+		printf ("%lu", y2 % 10000000000);
+
+		y1 = y1 + x1;
+		x1 = y1 - x1;
+		y2 = y2 + x2;
+		x2 = y2 - x2;
+
+		if (i == 98)
+                        continue;
+		printf(", ");
 	}
 	printf("\n");
 	return (0);
