@@ -21,7 +21,7 @@ int main(void)
 		else if (i >= 1)
 			s = x + y;
 
-		printf("%ld", s);
+		printf("%lu", (long unsigned)s);
 
 		if (i == 98)
 			continue;
