@@ -14,7 +14,7 @@ int main(void)
 	x = 0;
 	y = 1;
 
-	for (i = 0; i < 99; i++)
+	for (i = 0; i < 98; i++)
 	{
 		if (i == 0)
 			s = 1;
