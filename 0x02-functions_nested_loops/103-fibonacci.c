@@ -34,7 +34,6 @@ int main(void)
 			i += s;
 		}
 	}
-	
 	printf("%ld\n", i);
 	return (0);
 
