@@ -21,7 +21,11 @@ int main(void)
 		else if(i >= 1)
 			s = x + y;
 
-		printf("%ld, ", s);
+		printf("%ld", s);
+
+		if (i == 49)
+			continue;
+		printf(", ");
 		
 		x = y;
 		y = s;
