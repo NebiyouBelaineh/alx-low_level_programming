@@ -10,7 +10,7 @@
 int main(void)
 {
 	long int i, x, y, s;
-	
+
 	x = 0;
 	y = 1;
 
@@ -18,7 +18,7 @@ int main(void)
 	{
 		if (i == 0)
 			s = 1;
-		else if(i >= 1)
+		else if (i >= 1)
 			s = x + y;
 
 		printf("%ld", s);
@@ -26,10 +26,9 @@ int main(void)
 		if (i == 49)
 			continue;
 		printf(", ");
-		
 		x = y;
 		y = s;
 	}
 	printf("\n");
-	return(0);
+	return (0);
 }
