@@ -30,11 +30,13 @@ int main(void)
 		y = s;
 	}
 
-	/*The 90th iteration is the last possible iteration that can
+	/*
+	 * The 90th iteration is the last possible iteration that can
 	 * be handled by long data type. Therefore, on the 89th iteration,
 	 * we execute the final iteration and move to divide into two
 	 * halves and save the series in two long variables in the next
-	 * for loop*/
+	 * for loop
+	 */
 
 	s = x + y;
 	x = y;
@@ -47,16 +49,15 @@ int main(void)
 
 	for (i = 90; i < 99; i++)
 	{
-		printf ("%lu", y1 + (y2 / 10000000000));
-		printf ("%lu", y2 % 10000000000);
+		printf("%lu", y1 + (y2 / 10000000000));
+		printf("%lu", y2 % 10000000000);
 
 		y1 = y1 + x1;
 		x1 = y1 - x1;
 		y2 = y2 + x2;
 		x2 = y2 - x2;
-
 		if (i == 98)
-                        continue;
+			continue;
 		printf(", ");
 	}
 	printf("\n");
