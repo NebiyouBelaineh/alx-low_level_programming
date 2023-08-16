@@ -11,12 +11,16 @@ int main(void)
 {
 	int i, x, y, s;
 	
-	x = 1;
-	y = 2;
+	x = 0;
+	y = 1;
 
 	for (i = 0; i < 50; i++)
 	{
-		s = x + y;
+		if (i == 0)
+			s = 1;
+		else if(i >= 1)
+			s = x + y;
+
 		printf("%d, ", s);
 		
 		x = y;
