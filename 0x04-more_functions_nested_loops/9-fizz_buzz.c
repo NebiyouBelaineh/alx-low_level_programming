@@ -2,10 +2,10 @@
 
 /**
  * main - prints numbers from 1 to 100 while fizz is printed for
- * multipes of 3 and buzz of multiples of both 3 and 5. 
+ * multipes of 3 and buzz of multiples of both 3 and 5.
  * Return: 0 always.
  */
-int main (void)
+int main(void)
 {
 	int i;
 
