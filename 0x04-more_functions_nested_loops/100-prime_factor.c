@@ -17,8 +17,8 @@ int main(void)
 		mp = 2;
 		num = num / 2;
 	}
-	
-	for (i = 3; i <= sqrt(num); i+=2)
+
+	for (i = 3; i <= sqrt(num); i += 2)
 	{
 		while (num % i == 0)
 		{
