@@ -10,7 +10,7 @@ int _atoi(char *s)
 {
 	int i;
 	int len;
-	unsigned num;
+	unsigned int num;
 	int n_cnt;
 
 	len = strlen(s);
