@@ -15,9 +15,7 @@ char *leet(char *s)
 	{
 		for (j = 0; j < 5; j++)
 		{
-			if (s[i] == leet1[j])
-				s[i] = leet2[j];
-			else if (s[i] == leet1[j] - 32)
+			if (s[i] == leet1[j] || s[i] == leet1[j] - 32)
 				s[i] = leet2[j];
 		}
 	}
