@@ -16,6 +16,8 @@ char *cap_string(char *str)
 
 	for (i = 0; str[i] != '\0'; i++)
 	{
+		if (i == 0 && s[i] >= 'a' && s[i] <= 'z')
+			s[i] = s[i] - 32;
 		for (k = 0; k < j; k++)
 		{
 			if ((str[i] == sptr[k]) && (str[i + 1] >= 'a' && str[i + 1] <= 'z'))
