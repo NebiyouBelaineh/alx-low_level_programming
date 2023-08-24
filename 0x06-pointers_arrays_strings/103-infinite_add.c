@@ -10,13 +10,13 @@
  */
 char *infinite_add(char *n1, char *n2, char *r, int size_r)
 {
-	int i, j, of = 0, k = 0, num1, num2, sum;
+	int i, j, k, num1, num2, sum, of = 0;
 	char temp;
 
-	for (i = 0; n1[i] != '\0' || n2[j] != '\0'; i++, j++)
-
+	for (i = 0; n1[i] != '\0' || n2[j] != '\0';)
+		i++, j++;
 	i--, j--;
-	for (; i >= 0 || j >= 0 || of == 1; i--, j--, k++)
+	for (k = 0; i >= 0 || j >= 0 || of == 1; i--, j--, k++)
 	{
 		if (i < 0)
 			num1 = 0;
