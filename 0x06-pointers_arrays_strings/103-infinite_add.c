@@ -10,7 +10,6 @@
  */
 char *infinite_add(char *n1, char *n2, char *r, int size_r)
 {
-<<<<<<< HEAD
 	int i, j, of = 0, k, num1, num2, sum;
 	char temp;
 
@@ -18,13 +17,6 @@ char *infinite_add(char *n1, char *n2, char *r, int size_r)
 		i++;
 	for (j = 0; n2[j] != '\0';)
 		j++;
-=======
-	int i, j, k, num1, num2, sum, of = 0;
-	char temp;
-
-	for (i = 0; n1[i] != '\0' || n2[j] != '\0';)
-		i++, j++;
->>>>>>> 2536ea6428f8bbe6069e7f2a6b095288844d6be4
 	i--, j--;
 	for (k = 0; i >= 0 || j >= 0 || of == 1; i--, j--, k++)
 	{
