@@ -19,21 +19,21 @@ void print_buffer(char *b, int size)
 		{
 			printf("%08x :", i);
 
-			for (j = 0; j < 5; j++)
+			for (j = 0; j < 10; j++)
 			{
 				if (j == 0)
 					bytes = i;
 				if (bytes >= size)
 				{
 					printf("  ");
-					printf("   ");
-				}	
+				}
 				else
 				{
 					printf("%02x", b[bytes]);
-					printf("%02x ", b[bytes + 1]);
-					bytes += 2;
+					bytes++;
 				}
+				if (j % 2)
+					printf(" ");
 			}
 			for (j = 0; j < 10; j++, bytes++)
 			{
