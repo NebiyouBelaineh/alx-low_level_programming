@@ -17,14 +17,17 @@ void print_buffer(char *b, int size)
 	{
 		for (i = 0; i < size; i += 10)
 		{
-			printf("%08x: ", i);
+			printf("%08x :", i);
 
 			for (j = 0; j < 5; j++)
 			{
 				if (j == 0)
 					bytes = i;
 				if (bytes >= size)
-					printf("     ");
+				{
+					printf("  ");
+					printf("   ");
+				}	
 				else
 				{
 					printf("%02x", b[bytes]);
