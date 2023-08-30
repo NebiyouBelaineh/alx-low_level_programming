@@ -33,6 +33,9 @@ void _print_rev_recursion(char *s)
 {
 	int len, i = 1;
 
+	if (*s == '\0')
+		return;
+
 	len = strlen(s);
 	prt_rstr(s, len, i);
 }
