@@ -1,5 +1,6 @@
 #include "main.h"
 #include <string.h>
+#include <stdio.h>
 /**
  * palindrome - supports is_palindrome function
  * @start: starting position
@@ -11,19 +12,21 @@
  */
 int palindrome(char *start, char *end, int len, int i)
 {
-	if (i < (len + 1) / 2)
+	int result;
+
+	if (i < (len / 2))
 	{
-		if (*(start + i) != *(end - i) && *(start) != *(end))
+		if (*(start + i) != *(end - i))
 		{
+			printf("Different: %c vs %c \n", *(start + i), *(end - i));
 			return (0);
 		}
-		else
-		{
+		printf("Similar: %c vs %c \n", *(start + i), *(end + i));
 		i++;
-		palindrome(start, end, len, i);
-		}
+
+		result = palindrome(start, end, len, i);
 	}
-	return (1);
+	return (result);
 }
 /**
  * is_palindrome - checks for palindrome
