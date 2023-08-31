@@ -15,11 +15,8 @@ int palindrome(char *start, char *end, int len, int i)
 	{
 		if (*(start + i) != *(end - i))
 			return (0);
-		else
-		{
 		i++;
 		palindrome(start, end, len, i);
-		}
 	}
 	return (1);
 }
