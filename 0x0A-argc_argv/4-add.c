@@ -18,17 +18,16 @@ int main(int argc, char *argv[])
 	}
 	for (i = 1; i < argc && *argv[i] != '\0'; i++)
 	{
-		if (*argv[i] >= 48 && *argv[i] <= 57)
-		{
-			num =  atoi(argv[i]);
-			sum += num;
-		}
-		else
+		if (*argv[i] < '0' && *argv[i] > '9')
 		{
 			printf("Error\n");
 			return (1);
 		}
+
+		num =  atoi(argv[i]);
+		sum += num;
 	}
+
 	printf("%d\n", sum);
 	return (0);
 }
