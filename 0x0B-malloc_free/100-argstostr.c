@@ -13,9 +13,7 @@ char *argstostr(int ac, char **av)
 	int i, j, total = 0, count = 0;
 	char *s;
 
-	if (ac == 0)
-		return (NULL);
-	if (av == NULL)
+	if (ac == 0 || av == 0)
 		return (NULL);
 
 	for (i = 0; i < ac; i++)
@@ -24,7 +22,7 @@ char *argstostr(int ac, char **av)
 			j++;
 		total += j;
 	}
-	s = (char *)malloc(total * total * sizeof(char));
+	s = (char *)malloc((total + 1));
 	if (s == NULL)
 	{
 		free(s);
