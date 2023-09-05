@@ -7,12 +7,13 @@
  *
  * Return: Pointer to a 2D array, NULL on failure
  */
-int **alloc_grid(int width, int height)
+int **alloc_grid(int height, int width)
 {
 	int **ptr, i, j;
 
 	if (width <= 0 || height <= 0)
 		return (NULL);
+
 	ptr = (int **)malloc(width * sizeof(int *));
 
 	if (ptr == NULL)
@@ -20,13 +21,12 @@ int **alloc_grid(int width, int height)
 		free(ptr);
 		return (NULL);
 	}
-
 	for (i = 0; i < width; i++)
 	{
 		ptr[i] = (int *)malloc(height * sizeof(int));
 		if (ptr[i] == NULL)
 		{
-			free(ptr);
+			free(ptr[i]);
 			return (NULL);
 		}
 	}
