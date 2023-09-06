@@ -10,7 +10,7 @@
  */
 char *argstostr(int ac, char **av)
 {
-	int i, j, total = 0, count = 0;
+	int i, j, bytes = ac, count = 0;
 	char *s;
 
 	if (ac == 0 || av == 0)
@@ -20,25 +20,24 @@ char *argstostr(int ac, char **av)
 	{
 		for (j = 0; av[i][j] != '\0';)
 			j++;
-		total += j;
+		bytes += j;
 	}
-	s = (char *)malloc((total + 1));
-	if (s == NULL)
+
+	s = (char *)malloc((bytes + 1));
+	if (s != NULL)
+	{
+		for (i = 0; i < ac; i++)
+		{
+			for (j = 0; av[i][j] != '\0'; count++, j++)
+				s[count] = av[i][j];
+			s[count] = '\n';
+			count++;
+		}
+	}
+	else
 	{
 		free(s);
 		return (NULL);
 	}
-	for (i = 0; i < ac; i++)
-	{
-		s[count] = '\n';
-		for (j = 0; av[i][j] != '\0'; count++, j++)
-		{
-			s[count] = av[i][j];
-		}
-		s[count] = '\n';
-		count++;
-
-	}
 	return (s);
-
 }
