@@ -1,4 +1,4 @@
-#include "lists.h"
+#include <stdio.h>
 
 /**
  * print_first -	prints text before main function is executed
@@ -7,7 +7,7 @@
  */
 
 
-void __attribute__((constructor)) print_first()
+void __attribute__((constructor)) print_first(void)
 {
 	char *str;
 
