@@ -1,9 +1,5 @@
 ; A 64 bit program that prints Hello, Holberton followed by a newline
 
-section .data
-   msg: db "Hello, Holberton", 0
-   fmt: db "%s", 10, 0rbp
-
 extern printf
 
 section .text
@@ -21,4 +17,8 @@ main:
 
    mov rax,0
    ret
+
+section .data
+   msg: db "Hello, Holberton", 0
+   fmt: db "%s", 10, 0rbp
 
