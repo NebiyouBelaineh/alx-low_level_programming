@@ -10,11 +10,8 @@
 size_t print_listint_safe(const listint_t *head)
 {
 	size_t nodes = 0, index = 0;
-	const listint_t *current, *duplicate;
+	const listint_t *current = head, *duplicate;
 
-	if (head == NULL)
-		exit(98);
-	current = head;
 	while (current != NULL)
 	{
 		printf("[%p] %d\n", (void *)current, current->n);
@@ -32,6 +29,9 @@ size_t print_listint_safe(const listint_t *head)
 			duplicate = duplicate->next;
 			index++;
 		}
+
+		if (head == NULL)
+			exit(98);
 
 	}
 	return (nodes);
