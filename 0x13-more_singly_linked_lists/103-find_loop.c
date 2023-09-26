@@ -8,18 +8,29 @@
  */
 listint_t *find_listint_loop(listint_t *head)
 {
-	listint_t *current;
+	listint_t *track1, *track2;
 
 	if (head == NULL)
 		return (NULL);
-	current = head;
 
-	while (current != NULL)
+	track1 = head->next;
+	track2 = (head->next)->next;
+
+	while (track2 != NULL)
 	{
-		if ((current - current->next) > 0)
-			current = current->next;
-		else
-			return (current);
+		if (track1 == track2)
+		{
+			track1 = head;
+			while (track1 != track2)
+			{
+				track1 = track1->next;
+				track2 = track2->next;
+			}
+			return (track1);
+		}
+		track1 = track1->next;
+		track2 = (track2->next)->next;
 	}
+
 	return (NULL);
 }
