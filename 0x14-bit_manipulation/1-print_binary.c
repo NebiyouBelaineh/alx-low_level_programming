@@ -12,20 +12,9 @@
 void print_binary(unsigned long int n)
 {
 	size_t bin_num;
-	int index;
 
-	if (n == 0)
-		_putchar(0 + 48);
-	for (index = 10; index >= 0; index--)
-	{
-		bin_num = n >> index;
-
-		if (bin_num)
-		{
-			if (bin_num & 1)
-				_putchar(1 + 48);
-			else
-			_putchar(0 + 48);
-		}
-	}
+	if (n >> 1)
+		print_binary(n >> 1);
+	bin_num = n & 1;
+	_putchar(bin_num + 48);
 }
