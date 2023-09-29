@@ -15,6 +15,8 @@ void print_binary(unsigned long int n)
 
 	if (n >> 1)
 		print_binary(n >> 1);
+
 	bin_num = n & 1;
+
 	_putchar(bin_num + 48);
 }
