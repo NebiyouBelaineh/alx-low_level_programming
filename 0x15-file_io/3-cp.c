@@ -18,8 +18,7 @@ int main(int argc, char *argv[])
 		exit(97);
 	}
 	file_from = open(argv[1], O_RDONLY);
-	count_read = read(file_from, buffer, sizeof(buffer) - 1);
-	buffer[count_read] = '\0';
+	count_read = read(file_from, buffer, sizeof(buffer));
 
 	if (file_from == -1 || count_read == -1)
 	{
@@ -28,7 +27,9 @@ int main(int argc, char *argv[])
 		exit(98);
 	}
 	file_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
+
 	count_write = write(file_to, buffer, count_read);
+	
 	if (file_to == -1 || count_write == -1)
 	{
 		close(file_to);
