@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 	file_to = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, 0664);
 
 	count_write = write(file_to, buffer, count_read);
-	
+
 	if (file_to == -1 || count_write == -1)
 	{
 		close(file_to);
