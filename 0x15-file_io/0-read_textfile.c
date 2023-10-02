@@ -20,12 +20,18 @@ ssize_t read_textfile(const char *filename, size_t letters)
 	fd = open(filename, O_RDONLY);
 
 	if (fd == -1)
+	{
+		close(fd);
 		return (0);
+	}
 
 	count_read = read(fd, buffer, sizeof(buffer) - 1);
 
 	if (count_read == -1)
+	{
+		close(fd);
 		return (0);
+	}
 
 	buffer[count_read] = '\0';
 
@@ -35,8 +41,12 @@ ssize_t read_textfile(const char *filename, size_t letters)
 	count_write = write(STDOUT_FILENO, buffer, letters);
 
 	if (count_write < (ssize_t)letters || count_write == -1)
+	{
+		close(fd);
 		return (0);
+	}
 
+	close(fd);
 	return (count_write);
 
 }
