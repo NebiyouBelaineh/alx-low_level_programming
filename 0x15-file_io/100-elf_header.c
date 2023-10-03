@@ -75,6 +75,10 @@ void handle_elf(char *e)
 {
 	verify_elf(e);
 	sys_version_printer(e);
+	version_printer(e);
+	magic_printer(e);
+	data_printer(e);
+	os_abi_printer(e);
 }
 /**
 * verify_elf - verifies if the file is in elf format
@@ -112,10 +116,10 @@ void sys_version_printer(char *e)
 	magic_printer(e);
 
 	if (sys == '1')
-		printf("  Class:                              ELF32\n");
+		printf("  Class:                             ELF32\n");
 
 	if (sys == '2')
-		printf("  Class:                              ELF64\n");
+		printf("  Class:                             ELF64\n");
 	data_printer(e);
 	version_printer(e);
 	os_abi_printer(e);
@@ -139,6 +143,22 @@ void magic_printer(char *e)
 
 	printf("\n");
 
+}
+/**
+ * version_printer - prints version
+ * @e: magic.
+ * Return: no return.
+ */
+void version_printer(char *e)
+{
+	int version = e[6];
+
+	printf("  Version:                           %d", version);
+
+	if (version == EV_CURRENT)
+		printf(" (current)");
+
+	printf("\n");
 }
 /**
 * class_printer - prints Class information of an ELF file
@@ -174,20 +194,30 @@ void data_printer(char *e)
 		printf(", big endian\n");
 }
 /**
- * version_printer - prints version
- * @e: magic.
- * Return: no return.
- */
-void version_printer(char *e)
+* sys_version_printer - prints system version information for an ELF file
+* @e:  an array that speciifies how to interpret the file
+*/
+void sys_version_printer(char *e)
 {
-	int version = e[6];
+	char sys = e[4] + '0';
 
-	printf("  Version:                           %d", version);
+	if (sys == '0')
+		exit(98);
 
-	if (version == EV_CURRENT)
-		printf(" (current)");
+	printf("ELF Header:\n");
+	magic_printer(e);
 
-	printf("\n");
+	if (sys == '1')
+		printf("  Class:                             ELF32\n");
+
+	if (sys == '2')
+		printf("  Class:                             ELF64\n");
+	data_printer(e);
+	version_printer(e);
+	os_abi_printer(e);
+	type_printer(e);
+	address_printer(e);
+
 }
 /**
 * os_abi_printer - prints OS/ABI information on an ELF file
@@ -206,7 +236,7 @@ void os_abi_printer(char *e)
 	else if (osabi == 6)
 		printf("UNIX - Solaris\n");
 	else
-		printf("\n");
+		printf("<unknown: %x>\n", osabi);
 
 	printf("  ABI Version:                       %d\n", e[8]);
 }
