@@ -112,10 +112,10 @@ void sys_version_printer(char *e)
 	magic_printer(e);
 
 	if (sys == '1')
-		printf("  Class:                             ELF32\n");
+		printf("  Class:                              ELF32\n");
 
 	if (sys == '2')
-		printf("  Class:                             ELF64\n");
+		printf("  Class:                              ELF64\n");
 	data_printer(e);
 	version_printer(e);
 	os_abi_printer(e);
