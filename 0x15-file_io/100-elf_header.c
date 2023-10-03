@@ -160,7 +160,7 @@ void class_printer(char *e)
 /**
 * data_printer - prints Data information for an ELF file
 *
-* @e:  an array that speciifies how to interpret the file
+* @e: an array that speciifies how to interpret the file
 */
 void data_printer(char *e)
 {
@@ -175,8 +175,8 @@ void data_printer(char *e)
 }
 /**
  * version_printer - prints version
- * @e: magic.
- * Return: no return.
+ * @e: an array that speciifies how to interpret the file.
+ *
  */
 void version_printer(char *e)
 {
@@ -206,14 +206,14 @@ void os_abi_printer(char *e)
 	else if (osabi == 6)
 		printf("UNIX - Solaris\n");
 	else
-		printf(" \n");
+		printf("<unknown: %x>\n", osabi);
 
 	printf("  ABI Version:                       %d\n", e[8]);
 }
 /**
 * type_printer - prints type information for an ELF file.
 *
-* @e: identifies the object file type
+* @e: an array that speciifies how to interpret the file
 *
 */
 void type_printer(char *e)
@@ -241,12 +241,12 @@ void type_printer(char *e)
 }
 /**
  * address_printer - prints address
- * @e: magic.
- * Return: no return.
+ * @e: an array that speciifies how to interpret the file.
+ *
  */
 void address_printer(char *e)
 {
-	int i;
+	int index;
 	int begin;
 	char sys;
 
@@ -257,12 +257,12 @@ void address_printer(char *e)
 	{
 		begin = 26;
 		printf("80");
-		for (i = begin; i >= 22; i--)
+		for (index = begin; index >= 22; index--)
 		{
-			if (e[i] > 0)
-				printf("%x", e[i]);
-			else if (e[i] < 0)
-				printf("%x", 256 + e[i]);
+			if (e[index] > 0)
+				printf("%x", e[index]);
+			else if (e[index] < 0)
+				printf("%x", 256 + e[index]);
 		}
 		if (e[7] == 6)
 			printf("00");
@@ -271,13 +271,13 @@ void address_printer(char *e)
 	if (sys == '2')
 	{
 		begin = 26;
-		for (i = begin; i > 23; i--)
+		for (index = begin; index > 23; index--)
 		{
-			if (e[i] >= 0)
-				printf("%02x", e[i]);
+			if (e[index] >= 0)
+				printf("%02x", e[index]);
 
-			else if (e[i] < 0)
-				printf("%02x", 256 + e[i]);
+			else if (e[index] < 0)
+				printf("%02x", 256 + e[index]);
 
 		}
 	}
