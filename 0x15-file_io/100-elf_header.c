@@ -1,4 +1,25 @@
-#include "main.h"
+#include <elf.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+
+void handle_elf(char *e);
+void verify_elf(char *e);
+void magic_printer(char *e);
+void class_printer(char *e);
+void address_printer(char *e);
+void sys_version_printer(char *e);
+void data_printer(char *e);
+void version_printer(char *e);
+void os_abi_printer(char *e);
+void type_printer(char *e);
+
+
+
 /**
 * main - displays the information contained in the ELF header at the start
 * of an ELF file
@@ -10,42 +31,36 @@
 int main(int argc, char *argv[])
 {
 	int fd, count_read, close_status;
-
-	Elf64_Ehdr *e_header;
+	char e[27];
 
 	if (argc != 2)
 	{
 		dprintf(STDERR_FILENO, "Usage: ./elf_header elf_file\n");
 	    exit(98);
 	}
-	e_header = malloc(sizeof(Elf64_Ehdr));
-
-	if (e_header != NULL)
-	{
-		dprintf(STDERR_FILENO, "Error: Memory allocation failed\n");
-		exit(98);
-	}
-	fd = open(argv[11], O_RDONLY);
+	fd = open(argv[1], O_RDONLY);
 
 	if (fd == -1)
 	{
+		close(fd);
 		dprintf(STDERR_FILENO, "Error: Can't open file %s\n", argv[1]);
 		exit(98);
 	}
-	count_read = read(fd, e_header, sizeof(Elf64_Ehdr));
+	lseek(fd, 0, SEEK_SET);
+	count_read = read(fd, e, 27);
 	if (count_read == -1)
 	{
+		close(fd);
 		dprintf(STDERR_FILENO, "Can't read file: %s\n", argv[1]);
 		exit(98);
 	}
-	handle_elf(e_header);
-	free(e_header);
+	handle_elf(e);
 
 	close_status = close(fd);
 
 	if (close_status == -1)
 	{
-		dprintf(STDERR_FILENO, "Error: Fauled to close fd\n");
+		dprintf(STDERR_FILENO, "Error: Failed to close fd\n");
 		exit(98);
 	}
 	return (0);
@@ -54,206 +69,221 @@ int main(int argc, char *argv[])
 /**
 * handle_elf - supports printing elf file header information
 *
-* @e_header: struct datatype containing various ELF file information
+* @e: an array that specifiies how to interpret elf
 */
-void handle_elf(Elf64_Ehdr *e_header)
+void handle_elf(char *e)
 {
-	verify_elf(e_header->e_ident);
-	magic_printer(e_header->e_ident);
-	class_printer(e_header->e_ident);
-	data_printer(e_header->e_ident);
-	version_printer(e_header->e_ident);
-	os_abi_printer(e_header->e_ident);
-	printf("   ABI Version:                       ");
-	printf("%i\n", e_header->e_ident[EI_ABIVERSION]);
-	type_printer(e_header->e_type, e_header->e_ident);
-	entry_printer(e_header->e_entry, e_header->e_ident);
-
+	verify_elf(e);
+	sys_version_printer(e);
+	version_printer(e);
+	magic_printer(e);
+	data_printer(e);
+	os_abi_printer(e);
 }
 /**
 * verify_elf - verifies if the file is in elf format
 *
-* @e_ident:  an array that speciifies how to interpret the ELF file
+* @e:  an array that speciifies how to interpret the ELF file
 */
-void verify_elf(unsigned char *e_ident)
+void verify_elf(char *e)
 {
-	if (e_ident[0] == 0x7f && e_ident[1] == 'E' &&
-	e_ident[2] == 'L' && e_ident[3] == 'F')
+	int index;
+
+	for (index = 0; index < 4; index++)
 	{
-		printf("ELF Header:\n");
-	}
-	else
-	{
-		dprintf(STDERR_FILENO, "Error: File is not an ELF File\n");
-		exit(98);
+		if (e[index] != 127 &&
+		    e[index] != 'E' &&
+		    e[index] != 'L' &&
+		    e[index] != 'F')
+		{
+			dprintf(STDERR_FILENO, "Error: Not an ELF file\n");
+			exit(98);
+		}
 	}
 }
 /**
 * magic_printer - prints the magic number
 *
-* @e_ident: an array that speciifies how to interpret the ELF file
+* @e: an array that speciifies how to interpret the ELF file
 */
-void magic_printer(unsigned char *e_ident)
+void magic_printer(char *e)
 {
-	int index;
+	int bytes;
 
-	printf("  Magic:   ");
-	index = 0;
-	while (index < EI_NIDENT - 1)
-	{
-		printf("%02x ", e_ident[index]);
-		index++;
-	}
-	printf("%02x\n", e_ident[index]);
+	printf("  Magic:  ");
+
+	for (bytes = 0; bytes < 16; bytes++)
+		printf(" %02x", e[bytes]);
+
+	printf("\n");
+
+}
+/**
+ * version_printer - prints version
+ * @e: magic.
+ * Return: no return.
+ */
+void version_printer(char *e)
+{
+	int version = e[6];
+
+	printf("  Version:                           %d", version);
+
+	if (version == EV_CURRENT)
+		printf(" (current)");
+
+	printf("\n");
 }
 /**
 * class_printer - prints Class information of an ELF file
 *
-* @e_ident: an array that speciifies how to interpret the file
+* @e: an array that speciifies how to interpret the file
 */
-void class_printer(unsigned char *e_ident)
+void class_printer(char *e)
 {
 	printf("  Class:                             ");
-	if (e_ident[EI_CLASS] == ELFCLASSNONE)
+	if (e[EI_CLASS] == ELFCLASSNONE)
 		printf("Class invalid\n");
-	else if (e_ident[EI_CLASS] == ELFCLASS32)
+	else if (e[EI_CLASS] == ELFCLASS32)
 		printf("ELF32\n");
-	else if (e_ident[EI_CLASS] == ELFCLASS64)
+	else if (e[EI_CLASS] == ELFCLASS64)
 		printf("ELF64\n");
 	else
-		printf("<unknown: %x>\n", e_ident[EI_CLASS]);
+		printf("<unknown: %x>\n", e[EI_CLASS]);
 }
 /**
 * data_printer - prints Data information for an ELF file
 *
-* @e_ident:  an array that speciifies how to interpret the file
+* @e:  an array that speciifies how to interpret the file
 */
-void data_printer(unsigned char *e_ident)
+void data_printer(char *e)
 {
-	printf("  Data:                              ");
-	if (e_ident[EI_DATA] == ELFDATANONE)
-		printf("Unknown format\n");
-	else if (e_ident[EI_DATA] == ELFDATA2LSB)
-		printf("2's complement, little endian\n");
-	else if (e_ident[EI_DATA] == ELFDATA2MSB)
-		printf("2's complement, big endian\n");
-	else
-		printf("<unknown: %x>\n", e_ident[EI_DATA]);
+	char data = e[5];
+
+	printf("  Data:                              2's complement");
+	if (data == 1)
+		printf(", little endian\n");
+
+	if (data == 2)
+		printf(", big endian\n");
 }
 /**
-* version_printer - prints version information for an ELF file
-* @e_ident:  an array that speciifies how to interpret the file
+* sys_version_printer - prints system version information for an ELF file
+* @e:  an array that speciifies how to interpret the file
 */
-void version_printer(unsigned char *e_ident)
+void sys_version_printer(char *e)
 {
-	printf("  Version:                           ");
-	if (e_ident[EI_VERSION] == EV_CURRENT)
-		printf("%i (current)\n", EV_CURRENT);
-	else
-		printf("%i\n", e_ident[EI_VERSION]);
+	char sys = e[4] + '0';
+
+	if (sys == '0')
+		exit(98);
+
+	printf("ELF Header:\n");
+	magic_printer(e);
+
+	if (sys == '1')
+		printf("  Class:                             ELF32\n");
+
+	if (sys == '2')
+		printf("  Class:                             ELF64\n");
+	data_printer(e);
+	version_printer(e);
+	os_abi_printer(e);
+	type_printer(e);
+	address_printer(e);
+
 }
 /**
 * os_abi_printer - prints OS/ABI information on an ELF file
 *
-* @e_ident:  an array that speciifies how to interpret the file
+* @e:  an array that speciifies how to interpret the file
 */
-void os_abi_printer(unsigned char *e_ident)
+void os_abi_printer(char *e)
 {
+	char osabi = e[7];
+
 	printf("  OS/ABI:                            ");
-	switch (e_ident[EI_OSABI])
-	{
-	case ELFOSABI_SYSV:
+	if (osabi == 0)
 		printf("UNIX - System V\n");
-		break;
-	case ELFOSABI_HPUX:
-		printf("UNIX - HP-UX\n");
-		break;
-	case ELFOSABI_NETBSD:
+	else if (osabi == 2)
 		printf("UNIX - NetBSD\n");
-		break;
-	case ELFOSABI_LINUX:
-		printf("UNIX - Linux\n");
-		break;
-	case ELFOSABI_SOLARIS:
+	else if (osabi == 6)
 		printf("UNIX - Solaris\n");
-		break;
-	case ELFOSABI_IRIX:
-		printf("UNIX - IRIX\n");
-		break;
-	case ELFOSABI_FREEBSD:
-		printf("UNIX - FreeBSD\n");
-		break;
-	case ELFOSABI_TRU64:
-		printf("UNIX - TRU64\n");
-		break;
-	case ELFOSABI_ARM:
-		printf("ARM\n");
-		break;
-	case ELFOSABI_STANDALONE:
-		printf("Standalone App\n");
-		break;
-	default:
-		printf("<unknown: %x>\n", e_ident[EI_OSABI]);
-	}
+	else
+		printf("<unknown: %x>\n", osabi);
+
+	printf("  ABI Version:                       %d\n", e[8]);
 }
 /**
 * type_printer - prints type information for an ELF file.
 *
-* @e_type: identifies the object file type
-* @ident: an array that speciifies how to interpret the file
+* @e: identifies the object file type
 *
 */
-void type_printer(unsigned int e_type, unsigned char *e_ident)
+void type_printer(char *e)
 {
-	if (e_ident[EI_DATA] == ELFDATA2MSB)
-		e_type = e_type >> 8;
+	char type = e[16];
+
+	if (e[5] == 1)
+		type = e[16];
+	else
+		type = e[17];
 
 	printf("  Type:                              ");
-	switch (e_type)
-	{
-	case ET_NONE:
-		printf("NONE (Unknown type)\n");
-		break;
-	case ET_REL:
+	if (type == 0)
+		printf("NONE (No file type)\n");
+	else if (type == 1)
 		printf("REL (Relocatable file)\n");
-		break;
-	case ET_EXEC:
+	else if (type == 2)
 		printf("EXEC (Executable file)\n");
-		break;
-	case ET_DYN:
+	else if (type == 3)
 		printf("DYN (Shared object file)\n");
-		break;
-	case ET_CORE:
+	else if (type == 4)
 		printf("CORE (Core file)\n");
-		break;
-	default:
-		printf("<unknown: %x>\n", e_type);
+	else
+		printf("<unknown: %x>\n", type);
+}
+/**
+ * address_printer - prints address
+ * @e: magic.
+ * Return: no return.
+ */
+void address_printer(char *e)
+{
+	int i;
+	int begin;
+	char sys;
+
+	printf("  Entry point address:               0x");
+
+	sys = e[4] + '0';
+	if (sys == '1')
+	{
+		begin = 26;
+		printf("80");
+		for (i = begin; i >= 22; i--)
+		{
+			if (e[i] > 0)
+				printf("%x", e[i]);
+			else if (e[i] < 0)
+				printf("%x", 256 + e[i]);
+		}
+		if (e[7] == 6)
+			printf("00");
 	}
-}
 
-/**
-* entry_printer - prints entry point address for an ELF file
-*@e_entry:e_entry address
-*@e_ident:pointer to char string
-*/
-void entry_printer(unsigned int e_entry, unsigned char *e_ident)
-{
-	if (e_ident[EI_DATA] == ELFDATA2MSB)
-		e_entry = lit_to_big_endian(e_entry);
+	if (sys == '2')
+	{
+		begin = 26;
+		for (i = begin; i > 23; i--)
+		{
+			if (e[i] >= 0)
+				printf("%02x", e[i]);
 
-	printf("  Entry point address:               ");
-	printf("%#x\n", (unsigned int)e_entry);
+			else if (e[i] < 0)
+				printf("%02x", 256 + e[i]);
 
-}
-/**
-*lit_to_big_endian - converts hexes in little endian to big endian
-*@x:int to convert
-*Return:value in unsigned int
-*/
-unsigned int lit_to_big_endian(unsigned int x)
-{
-	return (((x >> 24) & 0x000000ff) |
-		((x >> 8) & 0x0000ff00)  |
-		((x << 8) & 0x00ff0000)  |
-		((x << 24) & 0xff000000));
+		}
+	}
+	printf("\n");
 }
