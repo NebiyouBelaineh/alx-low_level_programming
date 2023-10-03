@@ -206,7 +206,7 @@ void os_abi_printer(char *e)
 	else if (osabi == 6)
 		printf("UNIX - Solaris\n");
 	else
-		printf("<unknown: %x>\n", osabi);
+		printf(" \n");
 
 	printf("  ABI Version:                       %d\n", e[8]);
 }
