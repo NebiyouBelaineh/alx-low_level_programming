@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
 	if (file_to == -1 || count_write == -1)
 	{
 		close(file_to);
+		close(file_from);
 		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
 		exit(99);
 	}
