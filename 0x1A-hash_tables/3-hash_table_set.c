@@ -1,5 +1,5 @@
 #include "hash_tables.h"
-hash_node_t *add_node(const char *key, const char *value);
+
 /**
  * hash_table_set - adds an element to the hash table
  * @ht: is the hash table where an element is to be added
@@ -19,11 +19,12 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 	size = ht->size;
 	index = key_index((unsigned char *)key, size);
 	tmp  = ht->array[index];
-	/*We need to check key exisits in hash table*/
+	/*We need to check index is empty*/
 	if (tmp != NULL)
 	{
 		while (tmp != NULL)
 		{
+			/*If key exists, replace it*/
 			if (strcmp(key, tmp->key) == 0)
 			{
 				free(tmp->value);
@@ -32,6 +33,12 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 			}
 			tmp = tmp->next;
 		}
+		/*if key does not exisit, add it to the list*/
+		new_node = add_node(key, value);
+		if (new_node == NULL)
+			return (0);
+		new_node->next = ht->array[index];
+		ht->array[index] = new_node;
 	}
 	else
 	{
@@ -42,7 +49,6 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 		new_node->next = ht->array[index];
 		ht->array[index] = new_node;
 	}
-
 	return (1);
 }
 
