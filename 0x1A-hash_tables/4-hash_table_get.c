@@ -10,16 +10,18 @@ char *hash_table_get(const hash_table_t *ht, const char *key)
 {
 	unsigned long int index, size;
 
-	if (ht == NULL || key == NULL)
+	if (ht == NULL || key == NULL || key[0] == '\0')
 		return (NULL);
 
 	size = ht->size;
 	index = key_index((unsigned char *)key, size);
 
-	if (ht->array[index] != NULL)
-		if (strcmp(ht->array[index]->key, key) == 0)
-		{ /*Key exists*/
+	while (ht->array[index] != NULL)
+	{
+		if (strcmp(ht->array[index]->key, key) == 0)/*Key exists*/
 			return (ht->array[index]->value);
-		}
+		ht->array[index] = ht->array[index]->next;
+	}
+
 	return (NULL);
 }
