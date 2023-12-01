@@ -1,5 +1,6 @@
 #include "hash_tables.h"
-
+void support_table_set(shash_node_t *tmp, shash_table_t *ht,
+shash_node_t *new_node, const char *key);
 /**
  * shash_table_create - creates a hash table using an array
  * @size: size of the array to be created
@@ -44,14 +45,12 @@ shash_table_t *shash_table_create(unsigned long int size)
 int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 {
 	unsigned long int index, size;
-
 	shash_node_t *new_node, *tmp;
 
 	if (key == NULL || ht == NULL || value == NULL)
 		return (0);
 	size = ht->size;
 	index = key_index((unsigned char *)key, size);
-
 	tmp = ht->shead;
 	while (tmp != NULL)
 	{
@@ -84,20 +83,29 @@ int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 		ht->shead = new_node;
 	}
 	else
-	{
-		tmp = ht->shead;
-		while (tmp->snext != NULL && strcmp(tmp->snext->key, key) < 0)
-			tmp = tmp->snext;
-		new_node->sprev = tmp;
-		new_node->snext = tmp->snext;
-		if (tmp->snext == NULL)
-			ht->stail = new_node;
-		else
-			tmp->snext->sprev = new_node;
-		tmp->snext = new_node;
-	}
-
+		support_table_set(tmp, ht, new_node, key);
 	return (1);
+}
+/**
+ * support_table_set - support function to reduce number of lines in a function
+ * @tmp: temp variable to hold hash table struct pointer
+ * @ht: hash table
+ * @new_node: new node added
+ * @key: is the key for the element to be added
+ */
+void support_table_set(shash_node_t *tmp, shash_table_t *ht,
+shash_node_t *new_node, const char *key)
+{
+	tmp = ht->shead;
+	while (tmp->snext != NULL && strcmp(tmp->snext->key, key) < 0)
+		tmp = tmp->snext;
+	new_node->sprev = tmp;
+	new_node->snext = tmp->snext;
+	if (tmp->snext == NULL)
+		ht->stail = new_node;
+	else
+		tmp->snext->sprev = new_node;
+	tmp->snext = new_node;
 }
 
 /**
