@@ -8,8 +8,6 @@ def island_perimeter(grid):
 list of lists containing integers"""
     land_count = 0
     non_edge = 0
-    height = len(grid)
-    width = len(grid[0])
 
     for i in range(len(grid)):
         for j in range(len(grid[0])):
