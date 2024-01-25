@@ -12,5 +12,7 @@ list of lists containing integers"""
         for j in range(len(i)):
             if i[j] == 1:
                 land_count += 1
+    if land_count == 0:
+        return 0
     perimeter = (land_count * 2) + 2
     return perimeter
