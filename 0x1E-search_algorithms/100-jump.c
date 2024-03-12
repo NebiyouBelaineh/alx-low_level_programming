@@ -11,7 +11,8 @@ int jump_search(int *array, size_t size, int value)
 {
 	size_t index, block, high;
 
-	if (array == NULL || size == 0)
+	if (array == NULL || size == 0 || value < array[0] || value >
+	array[size - 1])
 		return (-1);
 	block = floor(sqrt(size));
 	high = block;
